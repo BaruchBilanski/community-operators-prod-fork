@@ -176,35 +176,88 @@ metadata:
             "name": "aqua"
           },
           "spec": {
-            "infra": {
-              "version": "2022.4",
-              "serviceAccount": "aqua-kube-enforcer-sa"
-            },
-            "config": {
+            "global": {
               "gateway_address": "aqua-gateway:8443",
-              "cluster_name": "aqua-secure",
+              "cluster_name": "Default-cluster-name"
+            },
+            "common": {
               "imagePullSecret": "aqua-registry"
             },
-            "deploy": {
-              "service": "ClusterIP",
-              "image": {
-                "registry": "registry.aquasec.com",
-                "tag": "<<KUBE_ENFORCER_TAG>>",
-                "repository": "kube-enforcer",
-                "pullPolicy": "Always"
-              }
-            },
-            "token": "<<KUBE_ENFORCER_GROUP_TOKEN>>",
-            "starboard": {
+            "kubeEnforcer": {
               "infra": {
-                "serviceAccount": "starboard-operator"
+                "version": "2022.4",
+                "serviceAccount": "aqua-kube-enforcer-sa"
               },
-              "config": {
-                "imagePullSecret": "starboard-registry"
+              "token": "<<KUBE_ENFORCER_GROUP_TOKEN>>",
+              "allowAnyVersion": null,
+              "deploy": {
+                "service": "ClusterIP",
+                "image": {
+                  "registry": "registry.aquasec.com",
+                  "tag": "2022.4",
+                  "repository": "kube-enforcer",
+                  "pullPolicy": "Always"
+                },
+                "resources": {
+                  "limits": {
+                    "cpu": "800m",
+                    "memory": "500Mi"
+                  },
+                  "requests": {
+                    "cpu": "200m",
+                    "memory": "125Mi"
+                  }
+                }
+              },
+              "starboard": {
+                "infra": {
+                  "serviceAccount": "starboard-operator"
+                },
+                "config": {
+                  "imagePullSecret": "starboard-registry"
+                },
+                "deploy": {
+                  "replicas": 1
+                }
+              },
+              "env": [
+                {
+                  "name": "SOME ENV",
+                  "value": "SOME ENV VALUE"
+                }
+              ]
+            },
+            "enforcer": {
+              "infra": {
+                "serviceAccount": "aqua-sa",
+                "version": "2022.4"
               },
               "deploy": {
-                "replicas": 1
-              }
+                "resources": {
+                  "limits": {
+                    "cpu": "1000m",
+                    "memory": "1500Mi"
+                  },
+                  "requests": {
+                    "cpu": "300m",
+                    "memory": "500Mi"
+                  }
+                },
+                "image": {
+                  "repository": "enforcer",
+                  "registry": "registry.aquasec.com",
+                  "tag": "2022.4",
+                  "pullPolicy": "IfNotPresent"
+                }
+              },
+              "secret": {
+                "name": null,
+                "key": null
+              },
+              "token": "<<ENFORCER_GROUP_TOKEN>>",
+              "runAsNonRoot": null,
+              "aqua_express_mode": false,
+              "rhcosVersion": null
             }
           }
         },
@@ -581,6 +634,11 @@ spec:
         kind: AquaCsp
         name: aquacsps.operator.aquasec.com
         version: v1alpha1
+      - description: Aqua Lightning Enforcer Deployment with Aqua Operator
+        displayName: AquaLightningEnforcer
+        kind: AquaLightning
+        name: aqualightnings.operator.aquasec.com
+        version: v1alpha1
       - description: Aqua Security Database Deployment with Aqua Operator
         displayName: AquaDatabase
         kind: AquaDatabase
@@ -595,11 +653,6 @@ spec:
         displayName: AquaKubeEnforcer
         kind: AquaKubeEnforcer
         name: aquakubeenforcers.operator.aquasec.com
-        version: v1alpha1
-      - description: Aqua Lightning
-        displayName: AquaLightning
-        kind: AquaLightning
-        name: aqualightnings.operator.aquasec.com
         version: v1alpha1
       - description: Aqua Security Gateway Deployment with Aqua Operator
         displayName: AquaGateway
