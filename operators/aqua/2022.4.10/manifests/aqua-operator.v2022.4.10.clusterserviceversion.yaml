@@ -170,98 +170,71 @@ metadata:
           }
         },
         {
-          "apiVersion": "operator.aquasec.com/v1alpha1",
-          "kind": "AquaLightning",
-          "metadata": {
-            "name": "aqua"
-          },
-          "spec": {
-            "global": {
-              "gateway_address": "aqua-gateway:8443",
-              "cluster_name": "Default-cluster-name"
-            },
-            "common": {
-              "imagePullSecret": "aqua-registry"
-            },
-            "kubeEnforcer": {
-              "infra": {
-                "version": "2022.4",
-                "serviceAccount": "aqua-kube-enforcer-sa"
-              },
-              "token": "<<KUBE_ENFORCER_GROUP_TOKEN>>",
-              "allowAnyVersion": null,
-              "deploy": {
-                "service": "ClusterIP",
-                "image": {
-                  "registry": "registry.aquasec.com",
-                  "tag": "2022.4",
-                  "repository": "kube-enforcer",
-                  "pullPolicy": "Always"
-                },
-                "resources": {
-                  "limits": {
-                    "cpu": "800m",
-                    "memory": "500Mi"
-                  },
-                  "requests": {
-                    "cpu": "200m",
-                    "memory": "125Mi"
-                  }
-                }
-              },
-              "starboard": {
-                "infra": {
-                  "serviceAccount": "starboard-operator"
-                },
-                "config": {
-                  "imagePullSecret": "starboard-registry"
-                },
-                "deploy": {
-                  "replicas": 1
-                }
-              },
-              "env": [
-                {
-                  "name": "SOME ENV",
-                  "value": "SOME ENV VALUE"
-                }
-              ]
-            },
-            "enforcer": {
-              "infra": {
-                "serviceAccount": "aqua-sa",
-                "version": "2022.4"
-              },
-              "deploy": {
-                "resources": {
-                  "limits": {
-                    "cpu": "1000m",
-                    "memory": "1500Mi"
-                  },
-                  "requests": {
-                    "cpu": "300m",
-                    "memory": "500Mi"
-                  }
-                },
-                "image": {
-                  "repository": "enforcer",
-                  "registry": "registry.aquasec.com",
-                  "tag": "2022.4",
-                  "pullPolicy": "IfNotPresent"
-                }
-              },
-              "secret": {
-                "name": null,
-                "key": null
-              },
-              "token": "<<ENFORCER_GROUP_TOKEN>>",
-              "runAsNonRoot": null,
-              "aqua_express_mode": false,
-              "rhcosVersion": null
-            }
-          }
+        "apiVersion": "operator.aquasec.com/v1alpha1",
+        "kind": "AquaLightning",
+        "metadata": {
+          "name": "aqua"
         },
-        {
+        "spec": {
+          "global": {
+            "gateway_address": "aqua-gateway:8443",
+            "cluster_name": "Default-cluster-name"
+          },
+          "common": {
+            "imagePullSecret": "aqua-registry"
+          },
+          "kubeEnforcer": {
+            "infra": {
+              "version": "2022.4",
+              "serviceAccount": "aqua-kube-enforcer-sa"
+            },
+            "token": "<<KUBE_ENFORCER_GROUP_TOKEN>>",
+            "allowAnyVersion": null,
+            "deploy": {
+              "service": "ClusterIP",
+              "image": {
+                "registry": "registry.aquasec.com",
+                "tag": "2022.4",
+                "repository": "kube-enforcer",
+                "pullPolicy": "Always"
+              }
+            },
+            "starboard": {
+              "infra": {
+                "serviceAccount": "starboard-operator"
+              },
+              "config": {
+                "imagePullSecret": "starboard-registry"
+              },
+              "deploy": {
+                "replicas": 1
+              }
+            },
+          "enforcer": {
+            "infra": {
+              "serviceAccount": "aqua-sa",
+              "version": "2022.4"
+            },
+            "deploy": {
+              "image": {
+                "repository": "enforcer",
+                "registry": "registry.aquasec.com",
+                "tag": "2022.4",
+                "pullPolicy": "IfNotPresent"
+              }
+            },
+            "token": "<<ENFORCER_GROUP_TOKEN>>",
+            "secret": {
+              "name": null,
+              "key": null
+            },
+            "runAsNonRoot": null,
+            "aqua_express_mode": false,
+            "rhcosVersion": null
+          }
+        }
+      },
+      {
           "apiVersion": "operator.aquasec.com/v1alpha1",
           "kind": "AquaGateway",
           "metadata": {
