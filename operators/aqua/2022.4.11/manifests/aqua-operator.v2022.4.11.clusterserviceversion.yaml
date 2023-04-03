@@ -610,7 +610,7 @@ spec:
         kind: AquaCsp
         name: aquacsps.operator.aquasec.com
         version: v1alpha1
-      - description: Aqua Lightning Enforcers Deployment
+      - description: Aqua Lightning Enforcers Deployment with Aqua Operator
         displayName: AquaLightningEnforcers
         kind: AquaLightning
         name: aqualightnings.operator.aquasec.com
